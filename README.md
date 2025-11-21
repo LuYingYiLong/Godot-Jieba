@@ -1,0 +1,1 @@
+# LightEditor-release-version
