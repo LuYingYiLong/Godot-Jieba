@@ -1,0 +1,7 @@
+<Solution>
+  <Configurations>
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Project Path="Godot-Jieba.vcxproj" Id="8dc599b9-c9a7-4c56-89f5-52e27e452bd0" />
+</Solution>
