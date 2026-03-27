@@ -12,7 +12,6 @@
 #include <windows.h>
 #include <vector>
 
-// 将 UTF-8 字符串转换为宽字符字符串（Windows 文件路径需要）
 static std::wstring utf8_to_wstring(const std::string& utf8_str) {
     if (utf8_str.empty()) return std::wstring();
     
@@ -56,7 +55,6 @@ godot::JiebaSegment::~JiebaSegment() {
     }
 }
 
-// 检查字符串是否包含非 ASCII 字符
 static bool contains_non_ascii(const godot::String& str) {
     for (int i = 0; i < str.length(); i++) {
         char32_t c = str[i];
@@ -78,11 +76,8 @@ bool godot::JiebaSegment::initialize(const godot::String& p_dict_path) {
     if (dict_path.is_empty()) {
         // 尝试多个可能的字典位置
         godot::PackedStringArray try_paths;
-        
-        // 项目内的 addons 目录（优先，避免中文路径问题）
         try_paths.append("res://addons/godot_jieba/dict");
         
-        // 与 DLL 同目录的 dict 文件夹
         godot::OS* os = godot::OS::get_singleton();
         if (os != nullptr) {
             godot::String exe_dir = os->get_executable_path().get_base_dir();
@@ -125,7 +120,7 @@ bool godot::JiebaSegment::initialize(const godot::String& p_dict_path) {
     }
 
     if (dict_path.is_empty()) {
-        godot::UtilityFunctions::push_error("Jieba: Could not find dictionary files. Please specify dict_path or ensure dict files are in addons/godot_jieba/dict/");
+        ERR_PRINT("Jieba: Could not find dictionary files. Please specify dict_path or ensure dict files are in addons/godot_jieba/dict/");
         return false;
     }
 
@@ -138,9 +133,8 @@ bool godot::JiebaSegment::initialize(const godot::String& p_dict_path) {
     }
 
 #ifdef _WIN32
-    // Windows: 检查路径是否包含中文
     if (contains_non_ascii(dict_dir_path)) {
-        godot::UtilityFunctions::push_error("Jieba: Dictionary path contains non-ASCII characters (Chinese/Japanese/etc). On Windows, please use only ASCII characters in the path. Solutions:\n1. Place dict files in res://addons/godot_jieba/dict/ (recommended)\n2. Move your project to a path without Chinese characters");
+        ERR_PRINT("Jieba: Dictionary path contains non-ASCII characters (Chinese/Japanese/etc). On Windows, please use only ASCII characters in the path. Solutions:\n1. Place dict files in res://addons/godot_jieba/dict/ (recommended)\n2. Move your project to a path without Chinese characters");
         return false;
     }
 #endif
@@ -167,10 +161,10 @@ bool godot::JiebaSegment::initialize(const godot::String& p_dict_path) {
         return true;
         
     } catch (const std::exception& e) {
-        godot::UtilityFunctions::push_error(godot::String("Jieba initialization failed: ") + e.what());
+        ERR_PRINT(godot::String("Jieba initialization failed: ") + e.what());
         return false;
     } catch (...) {
-        godot::UtilityFunctions::push_error("Jieba initialization failed: unknown error");
+        ERR_PRINT("Jieba initialization failed: unknown error");
         return false;
     }
 }
@@ -187,7 +181,7 @@ godot::PackedStringArray godot::JiebaSegment::cut(const godot::String& p_text, b
     godot::PackedStringArray result;
     
     if (!initialized || jieba == nullptr) {
-        godot::UtilityFunctions::push_warning("Jieba not initialized. Call initialize() first.");
+        WARN_PRINT("Jieba not initialized. Call initialize() first.");
         return result;
     }
     
@@ -206,7 +200,7 @@ godot::PackedStringArray godot::JiebaSegment::cut(const godot::String& p_text, b
             result[i] = godot::String::utf8(words[i].c_str());
         }
     } catch (const std::exception& e) {
-        godot::UtilityFunctions::push_error(godot::String("Jieba cut failed: ") + e.what());
+        ERR_PRINT(godot::String("Jieba cut failed: ") + e.what());
     }
     
     return result;
@@ -216,7 +210,7 @@ godot::PackedStringArray godot::JiebaSegment::cut_all(const godot::String& p_tex
     godot::PackedStringArray result;
     
     if (!initialized || jieba == nullptr) {
-        godot::UtilityFunctions::push_warning("Jieba not initialized. Call initialize() first.");
+        WARN_PRINT("Jieba not initialized. Call initialize() first.");
         return result;
     }
     
@@ -235,7 +229,7 @@ godot::PackedStringArray godot::JiebaSegment::cut_all(const godot::String& p_tex
             result[i] = godot::String::utf8(words[i].c_str());
         }
     } catch (const std::exception& e) {
-        godot::UtilityFunctions::push_error(godot::String("Jieba cut_all failed: ") + e.what());
+        ERR_PRINT(godot::String("Jieba cut_all failed: ") + e.what());
     }
     
     return result;
@@ -245,7 +239,7 @@ godot::PackedStringArray godot::JiebaSegment::cut_for_search(const godot::String
     godot::PackedStringArray result;
     
     if (!initialized || jieba == nullptr) {
-        godot::UtilityFunctions::push_warning("Jieba not initialized. Call initialize() first.");
+        WARN_PRINT("Jieba not initialized. Call initialize() first.");
         return result;
     }
     
@@ -264,7 +258,7 @@ godot::PackedStringArray godot::JiebaSegment::cut_for_search(const godot::String
             result[i] = godot::String::utf8(words[i].c_str());
         }
     } catch (const std::exception& e) {
-        godot::UtilityFunctions::push_error(godot::String("Jieba cut_for_search failed: ") + e.what());
+        ERR_PRINT(godot::String("Jieba cut_for_search failed: ") + e.what());
     }
     
     return result;
@@ -274,7 +268,7 @@ godot::PackedStringArray godot::JiebaSegment::cut_hmm(const godot::String& p_tex
     godot::PackedStringArray result;
     
     if (!initialized || jieba == nullptr) {
-        godot::UtilityFunctions::push_warning("Jieba not initialized. Call initialize() first.");
+        WARN_PRINT("Jieba not initialized. Call initialize() first.");
         return result;
     }
     
@@ -293,7 +287,7 @@ godot::PackedStringArray godot::JiebaSegment::cut_hmm(const godot::String& p_tex
             result[i] = godot::String::utf8(words[i].c_str());
         }
     } catch (const std::exception& e) {
-        godot::UtilityFunctions::push_error(godot::String("Jieba cut_hmm failed: ") + e.what());
+        ERR_PRINT(godot::String("Jieba cut_hmm failed: ") + e.what());
     }
     
     return result;
@@ -303,7 +297,7 @@ godot::Dictionary godot::JiebaSegment::tag(const godot::String& p_text) {
     godot::Dictionary result;
     
     if (!initialized || jieba == nullptr) {
-        godot::UtilityFunctions::push_warning("Jieba not initialized. Call initialize() first.");
+        WARN_PRINT("Jieba not initialized. Call initialize() first.");
         return result;
     }
     
@@ -323,7 +317,7 @@ godot::Dictionary godot::JiebaSegment::tag(const godot::String& p_text) {
             result[word] = tag_str;
         }
     } catch (const std::exception& e) {
-        godot::UtilityFunctions::push_error(godot::String("Jieba tag failed: ") + e.what());
+        ERR_PRINT(godot::String("Jieba tag failed: ") + e.what());
     }
     
     return result;
@@ -331,7 +325,7 @@ godot::Dictionary godot::JiebaSegment::tag(const godot::String& p_text) {
 
 godot::String godot::JiebaSegment::lookup_tag(const godot::String& p_word) {
     if (!initialized || jieba == nullptr) {
-        godot::UtilityFunctions::push_warning("Jieba not initialized. Call initialize() first.");
+        WARN_PRINT("Jieba not initialized. Call initialize() first.");
         return "";
     }
     
@@ -344,14 +338,14 @@ godot::String godot::JiebaSegment::lookup_tag(const godot::String& p_word) {
         std::string tag = jieba->LookupTag(word);
         return godot::String::utf8(tag.c_str());
     } catch (const std::exception& e) {
-        godot::UtilityFunctions::push_error(godot::String("Jieba lookup_tag failed: ") + e.what());
+        ERR_PRINT(godot::String("Jieba lookup_tag failed: ") + e.what());
         return "";
     }
 }
 
 bool godot::JiebaSegment::add_word(const godot::String& p_word, const godot::String& p_tag) {
     if (!initialized || jieba == nullptr) {
-        godot::UtilityFunctions::push_warning("Jieba not initialized. Call initialize() first.");
+        WARN_PRINT("Jieba not initialized. Call initialize() first.");
         return false;
     }
     
@@ -369,14 +363,14 @@ bool godot::JiebaSegment::add_word(const godot::String& p_word, const godot::Str
             return jieba->InsertUserWord(word, tag);
         }
     } catch (const std::exception& e) {
-        godot::UtilityFunctions::push_error(godot::String("Jieba add_word failed: ") + e.what());
+        ERR_PRINT(godot::String("Jieba add_word failed: ") + e.what());
         return false;
     }
 }
 
 bool godot::JiebaSegment::add_word_with_freq(const godot::String& p_word, int p_freq, const godot::String& p_tag) {
     if (!initialized || jieba == nullptr) {
-        godot::UtilityFunctions::push_warning("Jieba not initialized. Call initialize() first.");
+        WARN_PRINT("Jieba not initialized. Call initialize() first.");
         return false;
     }
     
@@ -394,14 +388,14 @@ bool godot::JiebaSegment::add_word_with_freq(const godot::String& p_word, int p_
             return jieba->InsertUserWord(word, p_freq, tag);
         }
     } catch (const std::exception& e) {
-        godot::UtilityFunctions::push_error(godot::String("Jieba add_word_with_freq failed: ") + e.what());
+        ERR_PRINT(godot::String("Jieba add_word_with_freq failed: ") + e.what());
         return false;
     }
 }
 
 bool godot::JiebaSegment::remove_word(const godot::String& p_word, const godot::String& p_tag) {
     if (!initialized || jieba == nullptr) {
-        godot::UtilityFunctions::push_warning("Jieba not initialized. Call initialize() first.");
+        WARN_PRINT("Jieba not initialized. Call initialize() first.");
         return false;
     }
     
@@ -419,14 +413,14 @@ bool godot::JiebaSegment::remove_word(const godot::String& p_word, const godot::
             return jieba->DeleteUserWord(word, tag);
         }
     } catch (const std::exception& e) {
-        godot::UtilityFunctions::push_error(godot::String("Jieba remove_word failed: ") + e.what());
+        ERR_PRINT(godot::String("Jieba remove_word failed: ") + e.what());
         return false;
     }
 }
 
 bool godot::JiebaSegment::find_word(const godot::String& p_word) {
     if (!initialized || jieba == nullptr) {
-        godot::UtilityFunctions::push_warning("Jieba not initialized. Call initialize() first.");
+        WARN_PRINT("Jieba not initialized. Call initialize() first.");
         return false;
     }
     
@@ -438,14 +432,14 @@ bool godot::JiebaSegment::find_word(const godot::String& p_word) {
         std::string word = p_word.utf8().get_data();
         return jieba->Find(word);
     } catch (const std::exception& e) {
-        godot::UtilityFunctions::push_error(godot::String("Jieba find_word failed: ") + e.what());
+        ERR_PRINT(godot::String("Jieba find_word failed: ") + e.what());
         return false;
     }
 }
 
 void godot::JiebaSegment::load_user_dict(const godot::String& p_path) {
     if (!initialized || jieba == nullptr) {
-        godot::UtilityFunctions::push_warning("Jieba not initialized. Call initialize() first.");
+        WARN_PRINT("Jieba not initialized. Call initialize() first.");
         return;
     }
     
@@ -462,6 +456,6 @@ void godot::JiebaSegment::load_user_dict(const godot::String& p_path) {
         std::string path = global_path.utf8().get_data();
         jieba->LoadUserDict(path);
     } catch (const std::exception& e) {
-        godot::UtilityFunctions::push_error(godot::String("Jieba load_user_dict failed: ") + e.what());
+        ERR_PRINT(godot::String("Jieba load_user_dict failed: ") + e.what());
     }
 }

@@ -2,11 +2,7 @@
 #define JIEBA_SEGMENT_H
 
 #include <godot_cpp/classes/ref_counted.hpp>
-#include <godot_cpp/variant/string.hpp>
-#include <godot_cpp/variant/packed_string_array.hpp>
-#include <godot_cpp/variant/dictionary.hpp>
 
-// 前向声明 CppJieba 类，避免在头文件中包含其头文件
 namespace cppjieba {
 	class Jieba;
 }
