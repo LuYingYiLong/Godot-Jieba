@@ -179,11 +179,7 @@ godot::String godot::JiebaSegment::get_dict_path() const {
 
 godot::PackedStringArray godot::JiebaSegment::cut(const godot::String& p_text, bool p_use_hmm) {
     godot::PackedStringArray result;
-    
-    if (!initialized || jieba == nullptr) {
-        WARN_PRINT("Jieba not initialized. Call initialize() first.");
-        return result;
-    }
+    ERR_FAIL_COND_V_MSG(!initialized || jieba == nullptr, result, "Jieba not initialized. Call initialize() first.");
     
     if (p_text.is_empty()) {
         return result;
@@ -208,11 +204,7 @@ godot::PackedStringArray godot::JiebaSegment::cut(const godot::String& p_text, b
 
 godot::PackedStringArray godot::JiebaSegment::cut_all(const godot::String& p_text) {
     godot::PackedStringArray result;
-    
-    if (!initialized || jieba == nullptr) {
-        WARN_PRINT("Jieba not initialized. Call initialize() first.");
-        return result;
-    }
+    ERR_FAIL_COND_V_MSG(!initialized || jieba == nullptr, result, "Jieba not initialized. Call initialize() first.");
     
     if (p_text.is_empty()) {
         return result;
@@ -237,12 +229,8 @@ godot::PackedStringArray godot::JiebaSegment::cut_all(const godot::String& p_tex
 
 godot::PackedStringArray godot::JiebaSegment::cut_for_search(const godot::String& p_text, bool p_use_hmm) {
     godot::PackedStringArray result;
-    
-    if (!initialized || jieba == nullptr) {
-        WARN_PRINT("Jieba not initialized. Call initialize() first.");
-        return result;
-    }
-    
+    ERR_FAIL_COND_V_MSG(!initialized || jieba == nullptr, result, "Jieba not initialized. Call initialize() first.");
+
     if (p_text.is_empty()) {
         return result;
     }
@@ -266,11 +254,7 @@ godot::PackedStringArray godot::JiebaSegment::cut_for_search(const godot::String
 
 godot::PackedStringArray godot::JiebaSegment::cut_hmm(const godot::String& p_text) {
     godot::PackedStringArray result;
-    
-    if (!initialized || jieba == nullptr) {
-        WARN_PRINT("Jieba not initialized. Call initialize() first.");
-        return result;
-    }
+    ERR_FAIL_COND_V_MSG(!initialized || jieba == nullptr, result, "Jieba not initialized. Call initialize() first.");
     
     if (p_text.is_empty()) {
         return result;
@@ -295,11 +279,7 @@ godot::PackedStringArray godot::JiebaSegment::cut_hmm(const godot::String& p_tex
 
 godot::Dictionary godot::JiebaSegment::tag(const godot::String& p_text) {
     godot::Dictionary result;
-    
-    if (!initialized || jieba == nullptr) {
-        WARN_PRINT("Jieba not initialized. Call initialize() first.");
-        return result;
-    }
+	ERR_FAIL_COND_V_MSG(!initialized || jieba == nullptr, result, "Jieba not initialized. Call initialize() first.");
     
     if (p_text.is_empty()) {
         return result;
@@ -324,10 +304,7 @@ godot::Dictionary godot::JiebaSegment::tag(const godot::String& p_text) {
 }
 
 godot::String godot::JiebaSegment::lookup_tag(const godot::String& p_word) {
-    if (!initialized || jieba == nullptr) {
-        WARN_PRINT("Jieba not initialized. Call initialize() first.");
-        return "";
-    }
+    ERR_FAIL_COND_V_MSG(!initialized || jieba == nullptr, godot::String(), "Jieba not initialized. Call initialize() first.");
     
     if (p_word.is_empty()) {
         return "";
@@ -344,10 +321,7 @@ godot::String godot::JiebaSegment::lookup_tag(const godot::String& p_word) {
 }
 
 bool godot::JiebaSegment::add_word(const godot::String& p_word, const godot::String& p_tag) {
-    if (!initialized || jieba == nullptr) {
-        WARN_PRINT("Jieba not initialized. Call initialize() first.");
-        return false;
-    }
+	ERR_FAIL_COND_V_MSG(!initialized || jieba == nullptr, false, "Jieba not initialized. Call initialize() first.");
     
     if (p_word.is_empty()) {
         return false;
@@ -369,10 +343,7 @@ bool godot::JiebaSegment::add_word(const godot::String& p_word, const godot::Str
 }
 
 bool godot::JiebaSegment::add_word_with_freq(const godot::String& p_word, int p_freq, const godot::String& p_tag) {
-    if (!initialized || jieba == nullptr) {
-        WARN_PRINT("Jieba not initialized. Call initialize() first.");
-        return false;
-    }
+    ERR_FAIL_COND_V_MSG(!initialized || jieba == nullptr, false, "Jieba not initialized. Call initialize() first.");
     
     if (p_word.is_empty() || p_freq <= 0) {
         return false;
@@ -394,10 +365,7 @@ bool godot::JiebaSegment::add_word_with_freq(const godot::String& p_word, int p_
 }
 
 bool godot::JiebaSegment::remove_word(const godot::String& p_word, const godot::String& p_tag) {
-    if (!initialized || jieba == nullptr) {
-        WARN_PRINT("Jieba not initialized. Call initialize() first.");
-        return false;
-    }
+	ERR_FAIL_COND_V_MSG(!initialized || jieba == nullptr, false, "Jieba not initialized. Call initialize() first.");
     
     if (p_word.is_empty()) {
         return false;
@@ -419,10 +387,7 @@ bool godot::JiebaSegment::remove_word(const godot::String& p_word, const godot::
 }
 
 bool godot::JiebaSegment::find_word(const godot::String& p_word) {
-    if (!initialized || jieba == nullptr) {
-        WARN_PRINT("Jieba not initialized. Call initialize() first.");
-        return false;
-    }
+    ERR_FAIL_COND_V_MSG(!initialized || jieba == nullptr, false, "Jieba not initialized. Call initialize() first.");
     
     if (p_word.is_empty()) {
         return false;
@@ -438,10 +403,7 @@ bool godot::JiebaSegment::find_word(const godot::String& p_word) {
 }
 
 void godot::JiebaSegment::load_user_dict(const godot::String& p_path) {
-    if (!initialized || jieba == nullptr) {
-        WARN_PRINT("Jieba not initialized. Call initialize() first.");
-        return;
-    }
+    ERR_FAIL_COND_MSG(!initialized || jieba == nullptr, "Jieba not initialized. Call initialize() first.");
     
     if (p_path.is_empty()) {
         return;
