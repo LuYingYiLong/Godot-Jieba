@@ -133,12 +133,18 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\jieba_editor_plugin.h" />
     <ClInclude Include="src\jieba_segment.h" />
+    <ClInclude Include="src\jieba_utf8.h" />
     <ClInclude Include="src\register_types.h" />
+    <ClInclude Include="src\resource_importer_jieba.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\jieba_editor_plugin.cpp" />
     <ClCompile Include="src\jieba_segment.cpp" />
+    <ClCompile Include="src\jieba_utf8.cpp" />
     <ClCompile Include="src\register_types.cpp" />
+    <ClCompile Include="src\resource_importer_jieba.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
