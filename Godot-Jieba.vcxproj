@@ -133,6 +133,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\jieba_editor_dock.h" />
     <ClInclude Include="src\jieba_editor_plugin.h" />
     <ClInclude Include="src\jieba_segment.h" />
     <ClInclude Include="src\jieba_utf8.h" />
@@ -140,6 +141,7 @@
     <ClInclude Include="src\resource_importer_jieba.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\jieba_editor_dock.cpp" />
     <ClCompile Include="src\jieba_editor_plugin.cpp" />
     <ClCompile Include="src\jieba_segment.cpp" />
     <ClCompile Include="src\jieba_utf8.cpp" />

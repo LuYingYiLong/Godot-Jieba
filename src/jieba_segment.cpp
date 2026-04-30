@@ -4,6 +4,8 @@
 
 #include <godot_cpp/core/class_db.hpp>
 #include <godot_cpp/variant/utility_functions.hpp>
+#include <godot_cpp/variant/array.hpp>
+#include <godot_cpp/variant/packed_int64_array.hpp>
 #include <godot_cpp/classes/os.hpp>
 #include <godot_cpp/classes/file_access.hpp>
 #include <godot_cpp/classes/resource_loader.hpp>
@@ -128,7 +130,9 @@ bool dict_source_exists(const String& p_path) {
 		ClassDB::bind_method(D_METHOD("cut_hmm", "text"), &JiebaSegment::cut_hmm);
 
 		ClassDB::bind_method(D_METHOD("tag", "text"), &JiebaSegment::tag);
+		ClassDB::bind_method(D_METHOD("tag_pairs", "text"), &JiebaSegment::tag_pairs);
 		ClassDB::bind_method(D_METHOD("lookup_tag", "word"), &JiebaSegment::lookup_tag);
+		ClassDB::bind_method(D_METHOD("extract_keywords", "text", "top_n"), &JiebaSegment::extract_keywords, DEFVAL(5));
 
 		ClassDB::bind_method(D_METHOD("add_word", "word", "tag"), &JiebaSegment::add_word, DEFVAL(""));
 		ClassDB::bind_method(D_METHOD("add_word_with_freq", "word", "freq", "tag"), &JiebaSegment::add_word_with_freq, DEFVAL(""));
@@ -364,6 +368,33 @@ bool dict_source_exists(const String& p_path) {
 		return result;
 	}
 
+	PackedStringArray JiebaSegment::tag_pairs(const String& p_text) {
+		PackedStringArray result;
+		ERR_FAIL_COND_V_MSG(!initialized || jieba == nullptr, result, "Jieba not initialized. Call initialize() first.");
+
+		if (p_text.is_empty()) {
+			return result;
+		}
+
+		try {
+			std::string text = p_text.utf8().get_data();
+			std::vector<std::pair<std::string, std::string>> tags;
+
+			jieba->Tag(text, tags);
+
+			for (const auto& pair : tags) {
+				String word = String::utf8(pair.first.c_str());
+				String tag_str = String::utf8(pair.second.c_str());
+				result.append(word + "/" + tag_str);
+			}
+		}
+		catch (const std::exception& e) {
+			ERR_PRINT(String("Jieba tag_pairs failed: ") + e.what());
+		}
+
+		return result;
+	}
+
 	String JiebaSegment::lookup_tag(const String& p_word) {
 		ERR_FAIL_COND_V_MSG(!initialized || jieba == nullptr, String(), "Jieba not initialized. Call initialize() first.");
 
@@ -380,6 +411,40 @@ bool dict_source_exists(const String& p_path) {
 			ERR_PRINT(String("Jieba lookup_tag failed: ") + e.what());
 			return "";
 		}
+	}
+
+	Array JiebaSegment::extract_keywords(const String& p_text, int p_top_n) {
+		Array result;
+		ERR_FAIL_COND_V_MSG(!initialized || jieba == nullptr, result, "Jieba not initialized. Call initialize() first.");
+
+		if (p_text.is_empty() || p_top_n <= 0) {
+			return result;
+		}
+
+		try {
+			std::string text = p_text.utf8().get_data();
+			std::vector<cppjieba::KeywordExtractor::Word> keywords;
+
+			jieba->extractor.Extract(text, keywords, static_cast<size_t>(p_top_n));
+
+			for (const cppjieba::KeywordExtractor::Word& keyword : keywords) {
+				Dictionary item;
+				PackedInt64Array offsets;
+				for (size_t offset : keyword.offsets) {
+					offsets.append(static_cast<int64_t>(offset));
+				}
+
+				item["word"] = String::utf8(keyword.word.c_str());
+				item["weight"] = keyword.weight;
+				item["offsets"] = offsets;
+				result.append(item);
+			}
+		}
+		catch (const std::exception& e) {
+			ERR_PRINT(String("Jieba extract_keywords failed: ") + e.what());
+		}
+
+		return result;
 	}
 
 	bool JiebaSegment::add_word(const String& p_word, const String& p_tag) {

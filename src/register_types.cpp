@@ -3,6 +3,7 @@
 #include "jieba_editor_plugin.h"
 #include "jieba_segment.h"
 #include "jieba_utf8.h"
+#include "jieba_editor_dock.h"
 #include "resource_importer_jieba.h"
 
 #include <gdextension_interface.h>
@@ -15,6 +16,7 @@ using namespace godot;
 void initialize_godot_jieba_module(ModuleInitializationLevel p_level) {
 	if (p_level == MODULE_INITIALIZATION_LEVEL_EDITOR) {
 		GDREGISTER_CLASS(ResourceImporterJieba);
+		GDREGISTER_CLASS(JiebaEditorDock);
 		GDREGISTER_CLASS(JiebaEditorPlugin);
 		EditorPlugins::add_by_type<JiebaEditorPlugin>();
 		return;

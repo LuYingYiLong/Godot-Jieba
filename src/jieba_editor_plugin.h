@@ -6,11 +6,14 @@
 #include <godot_cpp/classes/editor_plugin.hpp>
 
 namespace godot {
+	class JiebaEditorDock;
+
 	class JiebaEditorPlugin : public EditorPlugin {
 		GDCLASS(JiebaEditorPlugin, EditorPlugin)
 
 	private:
 		Ref<ResourceImporterJieba> importer;
+		JiebaEditorDock* dock = nullptr;
 
 	protected:
 		static void _bind_methods();

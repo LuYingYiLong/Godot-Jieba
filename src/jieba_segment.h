@@ -2,6 +2,7 @@
 #define JIEBA_SEGMENT_H
 
 #include <godot_cpp/classes/ref_counted.hpp>
+#include <godot_cpp/variant/array.hpp>
 
 namespace cppjieba {
 	class Jieba;
@@ -33,7 +34,9 @@ namespace godot {
 		PackedStringArray cut_hmm(const String& p_text);
 
 		Dictionary tag(const String& p_text);
+		PackedStringArray tag_pairs(const String& p_text);
 		String lookup_tag(const String& p_word);
+		Array extract_keywords(const String& p_text, int p_top_n = 5);
 
 		bool add_word(const String& p_word, const String& p_tag = "");
 		bool add_word_with_freq(const String& p_word, int p_freq, const String& p_tag = "");
