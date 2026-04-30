@@ -4,4 +4,4 @@
 	branch = 4.5
 [submodule "src/thirdparty/cppjieba"]
 	path = src/thirdparty/cppjieba
-	url = https://github.com/yanyiwu/cppjieba.git
+	url = https://github.com/LuYingYiLong/cppjieba.git
