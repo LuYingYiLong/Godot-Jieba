@@ -19,9 +19,11 @@ env.Append(CPPPATH=[
     "src/thirdparty/cppjieba/deps/limonp/include/"
 ])
 
-# 启用 C++ 异常处理（MSVC 需要 /EHsc）
+# 启用 C++ 异常处理。
 if env["platform"] == "windows":
     env.Append(CXXFLAGS=["/EHsc"])
+elif env["platform"] == "android":
+    env.Append(CXXFLAGS=["-fexceptions"])
 
 # Collect C++ sources
 sources = Glob("src/*.cpp")
