@@ -5,7 +5,7 @@
 <h1 align="center">Godot-Jieba</h1>
 
 <p align="center">
-  <b>Godot 中文分词器，基于 CppJieba 的 GDExtension 封装</b>
+  <b>Godot 中文分词器，基于 <a href="https://github.com/yanyiwu/cppjieba">CppJieba</a> 的 GDExtension 封装</b>
 </p>
 
 ## 简介
@@ -207,4 +207,4 @@ addons/godot_jieba/dict
 
 ## 许可证
 
-本项目自身代码请以仓库许可证为准。`godot-cpp`、`cppjieba` 及其依赖遵循各自上游项目许可证。
+本项目自身代码请以仓库许可证为准。[CppJieba](https://github.com/yanyiwu/cppjieba) 及其依赖遵循各自上游项目许可证。
