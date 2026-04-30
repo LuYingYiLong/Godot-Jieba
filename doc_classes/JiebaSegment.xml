@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="JiebaSegment" inherits="RefCounted" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="4.5">
+	<brief_description>
+		Chinese word segmentation, part-of-speech tagging, keyword extraction, and user dictionary management powered by CppJieba.
+	</brief_description>
+	<description>
+		[JiebaSegment] wraps CppJieba for use from Godot scripts. Call [method initialize] before using segmentation methods.
+		The default dictionary directory is usually [code]res://addons/godot_jieba/dict[/code]. The extension can load [code].utf8[/code] dictionary files, [code].gbk[/code] dictionary files, and imported [JiebaUTF8] resources.
+	</description>
+	<tutorials>
+	</tutorials>
+	<methods>
+		<method name="add_word">
+			<return type="bool" />
+			<param index="0" name="word" type="String" />
+			<param index="1" name="tag" type="String" default="&quot;&quot;" />
+			<description>
+				Adds a user word to the in-memory dictionary. Optionally assigns a part-of-speech tag. Returns [code]true[/code] if the word was inserted.
+			</description>
+		</method>
+		<method name="add_word_with_freq">
+			<return type="bool" />
+			<param index="0" name="word" type="String" />
+			<param index="1" name="freq" type="int" />
+			<param index="2" name="tag" type="String" default="&quot;&quot;" />
+			<description>
+				Adds a user word with an explicit frequency and optional part-of-speech tag. [param freq] must be greater than zero.
+			</description>
+		</method>
+		<method name="cut">
+			<return type="PackedStringArray" />
+			<param index="0" name="text" type="String" />
+			<param index="1" name="use_hmm" type="bool" default="true" />
+			<description>
+				Segments [param text] using CppJieba's mixed mode. When [param use_hmm] is [code]true[/code], HMM is used for unknown words.
+			</description>
+		</method>
+		<method name="cut_all">
+			<return type="PackedStringArray" />
+			<param index="0" name="text" type="String" />
+			<description>
+				Segments [param text] in full mode, returning all dictionary words found in the text.
+			</description>
+		</method>
+		<method name="cut_for_search">
+			<return type="PackedStringArray" />
+			<param index="0" name="text" type="String" />
+			<param index="1" name="use_hmm" type="bool" default="true" />
+			<description>
+				Segments [param text] for search indexing. This mode first uses mixed mode, then further splits longer words into shorter search tokens.
+			</description>
+		</method>
+		<method name="cut_hmm">
+			<return type="PackedStringArray" />
+			<param index="0" name="text" type="String" />
+			<description>
+				Segments [param text] using only the HMM segmenter.
+			</description>
+		</method>
+		<method name="extract_keywords">
+			<return type="Array" />
+			<param index="0" name="text" type="String" />
+			<param index="1" name="top_n" type="int" default="5" />
+			<description>
+				Extracts up to [param top_n] keywords using TF-IDF. Returns an [Array] of [Dictionary] values. Each dictionary contains [code]word[/code] ([String]), [code]weight[/code] ([float]), and [code]offsets[/code] ([PackedInt64Array]).
+			</description>
+		</method>
+		<method name="find_word">
+			<return type="bool" />
+			<param index="0" name="word" type="String" />
+			<description>
+				Returns whether [param word] exists in the current dictionary trie.
+			</description>
+		</method>
+		<method name="get_dict_path">
+			<return type="String" />
+			<description>
+				Returns the normalized dictionary directory used by the current initialized instance. Returns an empty string before successful initialization.
+			</description>
+		</method>
+		<method name="initialize">
+			<return type="bool" />
+			<param index="0" name="dict_path" type="String" default="&quot;&quot;" />
+			<description>
+				Initializes CppJieba from [param dict_path]. If [param dict_path] is empty, common dictionary locations are searched automatically. Returns [code]true[/code] on success.
+				The dictionary directory must provide the base files [code]jieba.dict[/code], [code]hmm_model[/code], [code]user.dict[/code], [code]idf[/code], and [code]stop_words[/code] with either [code].utf8[/code] or [code].gbk[/code] extensions.
+			</description>
+		</method>
+		<method name="is_initialized">
+			<return type="bool" />
+			<description>
+				Returns whether [method initialize] has completed successfully.
+			</description>
+		</method>
+		<method name="load_user_dict">
+			<return type="void" />
+			<param index="0" name="path" type="String" />
+			<description>
+				Loads additional user dictionary entries from [param path]. The file can be UTF-8, GBK, or an imported [JiebaUTF8] resource.
+			</description>
+		</method>
+		<method name="lookup_tag">
+			<return type="String" />
+			<param index="0" name="word" type="String" />
+			<description>
+				Returns the part-of-speech tag associated with [param word], or an empty string if no tag is known.
+			</description>
+		</method>
+		<method name="remove_word">
+			<return type="bool" />
+			<param index="0" name="word" type="String" />
+			<param index="1" name="tag" type="String" default="&quot;&quot;" />
+			<description>
+				Removes a user word from the in-memory dictionary. Optionally matches a specific part-of-speech tag. Returns [code]true[/code] if the word was removed.
+			</description>
+		</method>
+		<method name="tag">
+			<return type="Dictionary" />
+			<param index="0" name="text" type="String" />
+			<description>
+				Tags [param text] and returns a [Dictionary] mapping words to part-of-speech tags. If the same word appears more than once, later entries overwrite earlier entries. Use [method tag_pairs] when order must be preserved.
+			</description>
+		</method>
+		<method name="tag_pairs">
+			<return type="PackedStringArray" />
+			<param index="0" name="text" type="String" />
+			<description>
+				Tags [param text] and returns ordered [code]word/tag[/code] strings.
+			</description>
+		</method>
+	</methods>
+</class>

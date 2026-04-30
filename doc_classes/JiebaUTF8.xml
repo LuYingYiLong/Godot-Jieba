@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="JiebaUTF8" inherits="Resource" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="4.5">
+	<brief_description>
+		Imported UTF-8 dictionary text resource used by Godot-Jieba.
+	</brief_description>
+	<description>
+		[JiebaUTF8] stores dictionary text normalized to UTF-8. It is produced by the Godot-Jieba dictionary importer for [code].utf8[/code] and [code].gbk[/code] files.
+		This resource lets exported projects load dictionary text through Godot's resource system instead of relying on raw dictionary files being recognized directly.
+	</description>
+	<tutorials>
+	</tutorials>
+	<methods>
+		<method name="get_source_data">
+			<return type="PackedByteArray" />
+			<description>
+				Returns the optional original source bytes saved by the importer.
+			</description>
+		</method>
+		<method name="get_source_encoding">
+			<return type="String" />
+			<description>
+				Returns the source encoding used during import, usually [code]UTF-8[/code] or [code]GBK[/code].
+			</description>
+		</method>
+		<method name="get_source_path">
+			<return type="String" />
+			<description>
+				Returns the original source file path recorded during import.
+			</description>
+		</method>
+		<method name="get_utf8_data">
+			<return type="PackedByteArray" />
+			<description>
+				Returns [member utf8_text] encoded as UTF-8 bytes.
+			</description>
+		</method>
+		<method name="get_utf8_text">
+			<return type="String" />
+			<description>
+				Returns the dictionary text normalized to UTF-8.
+			</description>
+		</method>
+		<method name="set_source_data">
+			<return type="void" />
+			<param index="0" name="source_data" type="PackedByteArray" />
+			<description>
+				Sets the optional original source bytes.
+			</description>
+		</method>
+		<method name="set_source_encoding">
+			<return type="void" />
+			<param index="0" name="source_encoding" type="String" />
+			<description>
+				Sets the source encoding label.
+			</description>
+		</method>
+		<method name="set_source_path">
+			<return type="void" />
+			<param index="0" name="source_path" type="String" />
+			<description>
+				Sets the original source file path.
+			</description>
+		</method>
+		<method name="set_utf8_text">
+			<return type="void" />
+			<param index="0" name="utf8_text" type="String" />
+			<description>
+				Sets the dictionary text normalized to UTF-8.
+			</description>
+		</method>
+	</methods>
+	<members>
+		<member name="source_data" type="PackedByteArray" setter="set_source_data" getter="get_source_data">
+			Optional original source bytes saved by the importer.
+		</member>
+		<member name="source_encoding" type="String" setter="set_source_encoding" getter="get_source_encoding">
+			Source encoding used during import. The importer supports [code]UTF-8[/code] and [code]GBK[/code].
+		</member>
+		<member name="source_path" type="String" setter="set_source_path" getter="get_source_path">
+			Original source file path recorded during import.
+		</member>
+		<member name="utf8_text" type="String" setter="set_utf8_text" getter="get_utf8_text">
+			Dictionary text normalized to UTF-8.
+		</member>
+	</members>
+</class>
