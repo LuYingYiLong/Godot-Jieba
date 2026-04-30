@@ -1,4 +1,4 @@
-<p align="center>
+<p align="center">
   <img alt="JiebaBanner" src="https://github.com/user-attachments/assets/d4d02802-9ec4-439d-9dc5-c227a37354d2" />
 </p>
 
